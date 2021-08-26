@@ -6,7 +6,13 @@
 #    By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/22 17:31:21 by jisokang          #+#    #+#              #
-#    Updated: 2021/08/22 17:31:23 by jisokang         ###   ########.fr        #
+#    Updated: 2021/08/25 17:40:21 by jisokang         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
+CC		= gcc
+CFLAGS	= -Wall -Werror -Wextra
+SRCS	= philo.c
+
+all :
+	$(CC) $(SRCS)
