@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   color.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/09/13 13:54:15 by jisokang          #+#    #+#             */
-/*   Updated: 2021/09/13 14:56:02 by jisokang         ###   ########.fr       */
+/*   Created: 2021/06/07 20:09:25 by jisokang          #+#    #+#             */
+/*   Updated: 2021/09/13 14:41:59 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_H
-# define PHILO_H
+#ifndef COLOR_H
+# define COLOR_H
 
-# include <stdio.h>
-# include <stdlib.h>
-# include <pthread.h>
-# include "color.h"
+# define RED		"\x1b[31m"
+# define GREEN		"\x1b[32m"
+# define BLUE		"\x1b[34m"
+# define YELLOW		"\x1b[33m"
+# define MAGENTA	"\x1b[35m"
+# define CYAN		"\x1b[36m"
 
-# define ERROR	1
-# define TRUE	1
-# define FALSE	0
+# define RESET		"\x1b[0m"
 
 #endif
