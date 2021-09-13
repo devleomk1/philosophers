@@ -1,24 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.c                                            :+:      :+:    :+:   */
+/*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/25 16:37:35 by jisokang          #+#    #+#             */
-/*   Updated: 2021/09/13 14:00:57 by jisokang         ###   ########.fr       */
+/*   Created: 2021/09/13 13:54:15 by jisokang          #+#    #+#             */
+/*   Updated: 2021/09/13 14:00:47 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#ifndef PHILO_H
+# define PHILO_H
 
-int	main(int argc, char **argv)
-{
-	if (argc < 5 || argc > 6)
-	{
-		printf("Wrong Usage\n");
-		return (ERROR);
-	}
+# include <stdio.h>
+# include <pthread.h>
 
-	return (0);
-}
+# define ERROR	1
+# define TRUE	1
+# define FALSE	0
+
+#endif
