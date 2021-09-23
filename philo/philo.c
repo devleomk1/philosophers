@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 16:37:35 by jisokang          #+#    #+#             */
-/*   Updated: 2021/09/23 15:44:12 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/09/23 21:32:26 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,19 +52,35 @@ int	main(int argc, char **argv)
 	{
 		//atoi -> ft_atoi for philo -> 음수 처리
 		argv_num[i] = atoi(argv[i]);
-		printf("argv_num[%d] = %d\n", i, argv_num[i]);
 		i++;
 	}
+	//define
+	//argv_num_name 0 = NUM_PHIL
+	//argv_num_name 1 = TIME_DIE
+	//argv_num_name 2 = TIME_EAT
+	//argv_num_name 3 = TIME_SLP
+	//argv_num_name 4 = NU_P_EAT
+
+
+	pthread_mutex_lock();
 	if (argv_num[1] < 2)
 	{
 		printf("ERROR\n");
 		return (ERROR);
 	}
+	//init();
 	state.num_philo = argv_num[1];
 	state.time_die = argv_num[2];
 	state.time_eat = argv_num[3];
 	state.time_sleep = argv_num[4];
-	state.num_phi_eat = argv_num[5];
+	if (argc != 6)
+		state.num_phi_eat = argv_num[5];
+	else
+		state.num_phi_eat = 0;
+
+
+		//malloc() -> philo
+		//malloc() -> forks
 	pthread_create(&p1, NULL, &philo_work, NULL);
 	pthread_create(&p2, NULL, &philo_work, NULL);
 	pthread_create(&p3, NULL, &philo_work, NULL);

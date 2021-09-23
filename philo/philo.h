@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:54:15 by jisokang          #+#    #+#             */
-/*   Updated: 2021/09/23 15:37:25 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/09/23 21:12:03 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ typedef struct s_state
 	int				time_sleep;
 	int				num_phi_eat;
 	pthread_mutex_t	die_mutex;
-	pthread_mutex_t	fork_mutex;
+	pthread_mutex_t	*forks_mutex; //포크는 여러개니까아
 	t_philo			*philo;
 }					t_state;
 
