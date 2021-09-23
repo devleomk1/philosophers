@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:54:15 by jisokang          #+#    #+#             */
-/*   Updated: 2021/09/19 13:04:40 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/09/23 15:37:25 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <stdio.h>
 # include <stdlib.h>
+# include <unistd.h>
 # include <pthread.h>
 # include "color.h"
 
@@ -28,7 +29,7 @@ typedef struct s_philo
 	int	stat;
 }		t_philo;
 
-typedef struct s_info
+typedef struct s_state
 {
 	int				num_philo;
 	int				time_die;
@@ -36,8 +37,8 @@ typedef struct s_info
 	int				time_sleep;
 	int				num_phi_eat;
 	pthread_mutex_t	die_mutex;
-	pthread_mutex_t	_mutex;
+	pthread_mutex_t	fork_mutex;
 	t_philo			*philo;
-}					t_info;
+}					t_state;
 
 #endif
