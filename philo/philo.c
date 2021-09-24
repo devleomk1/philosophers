@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 16:37:35 by jisokang          #+#    #+#             */
-/*   Updated: 2021/09/23 21:32:26 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/09/24 23:06:18 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 //{
 
 //}
+
 //philosopher's number must start no.1
 
 static void	*philo_work(void *philo_void)
