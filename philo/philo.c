@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 16:37:35 by jisokang          #+#    #+#             */
-/*   Updated: 2021/09/24 23:06:18 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/09/25 17:30:56 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,6 @@ int	main(int argc, char **argv)
 	pthread_t	p1;
 	pthread_t	p2;
 	pthread_t	p3;
-	//pthread_t	p4;
-	//pthread_t	p5;
 
 	if (argc < 5 || argc > 6)
 	{
@@ -48,6 +46,7 @@ int	main(int argc, char **argv)
 			" [time_sleep] [num_each_philos_eat(optional)]\n"RESET);
 		return (ERROR);
 	}
+
 	i = 1;
 	while (i < argc)
 	{
@@ -78,7 +77,6 @@ int	main(int argc, char **argv)
 		state.num_phi_eat = argv_num[5];
 	else
 		state.num_phi_eat = 0;
-
 
 		//malloc() -> philo
 		//malloc() -> forks
