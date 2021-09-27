@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:54:15 by jisokang          #+#    #+#             */
-/*   Updated: 2021/09/23 21:12:03 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/09/27 01:18:11 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,20 @@
 # define TRUE	1
 # define FALSE	0
 
+# define NUM_PHIL	1
+# define TIME_DIE	2
+# define TIME_EAT	3
+# define TIME_SLP	4
+# define NUM_PEAT	5
+
 typedef struct s_philo
 {
-	int	num;
-	int	stat;
-}		t_philo;
+	int		num;
+	int		stat;
+	int		eat_cnt;
+}			t_philo;
 
-typedef struct s_state
+typedef struct s_info
 {
 	int				num_philo;
 	int				time_die;
@@ -39,6 +46,8 @@ typedef struct s_state
 	pthread_mutex_t	die_mutex;
 	pthread_mutex_t	*forks_mutex; //포크는 여러개니까아
 	t_philo			*philo;
-}					t_state;
+}					t_info;
+
+int		ft_atoi_philo(const char *str);
 
 #endif

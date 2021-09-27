@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/25 17:32:35 by jisokang          #+#    #+#             */
-/*   Updated: 2021/09/25 19:59:31 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/09/26 16:05:04 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,4 @@ int	ft_atoi_philo(const char *str)
 		i++;
 	}
 	return (result);
-}
-
-int	main(int argc, char **argv)
-{
-	printf("%d\n", ft_atoi_philo(argv[1]));
-	return (0);
 }
