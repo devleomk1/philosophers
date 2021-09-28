@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:54:15 by jisokang          #+#    #+#             */
-/*   Updated: 2021/09/27 01:18:11 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/09/27 21:17:38 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <pthread.h>
 # include "color.h"
 
-# define ERROR	1
+# define ERROR	-1
 # define TRUE	1
 # define FALSE	0
 
@@ -28,6 +28,12 @@
 # define TIME_EAT	3
 # define TIME_SLP	4
 # define NUM_PEAT	5
+
+# define THINK		0
+# define FORKS		1
+# define EAT		2
+# define SLEEP		3
+# define DEAD		4
 
 typedef struct s_philo
 {
@@ -39,9 +45,9 @@ typedef struct s_philo
 typedef struct s_info
 {
 	int				num_philo;
-	int				time_die;
-	int				time_eat;
-	int				time_sleep;
+	uint64_t		time_die;
+	uint64_t		time_eat;
+	uint64_t		time_sleep;
 	int				num_phi_eat;
 	pthread_mutex_t	die_mutex;
 	pthread_mutex_t	*forks_mutex; //포크는 여러개니까아
