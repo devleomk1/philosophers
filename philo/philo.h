@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:54:15 by jisokang          #+#    #+#             */
-/*   Updated: 2021/09/28 15:47:09 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/09/28 18:22:50 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,13 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <pthread.h>
+# include <sys/time.h>
 # include "color.h"
 
-# define ERROR	-1
-# define TRUE	1
-# define FALSE	0
+# define ERROR		-1
+# define TRUE		1
+# define FALSE		0
+# define TO_MSEC	1000
 
 # define NUM_PHIL	1
 # define TIME_DIE	2
@@ -54,6 +56,8 @@ typedef struct s_info
 	int				num_phi_eat;
 	pthread_mutex_t	die_mutex;
 	pthread_mutex_t	*forks_mutex; //포크는 여러개니까아
+	pthread_mutex_t	*eat_mutex;
+	int				flag;
 	t_philo			*philo;
 }					t_info;
 

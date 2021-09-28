@@ -6,13 +6,31 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 16:37:35 by jisokang          #+#    #+#             */
-/*   Updated: 2021/09/28 16:08:53 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/09/28 20:59:29 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
 //philosopher's number must start no.1
+
+uint64_t	get_time_ms(void)
+{
+	uint64_t		ms_sec;
+	struct timeval	tv;
+
+	gettimeofday(&tv, NULL);
+	ms_sec = tv.tv_sec * 1000 + tv.tv_usec / 1000;
+	return (ms_sec);
+}
+
+void	print_message(t_philo *philo, char *str)
+{
+	// mutex lock
+	printf("%lums %d %s\n", get_time_ms(), philo->num, str);
+	// mutex unlock
+}
+
 
 void	*monitor_philo()
 {
@@ -21,42 +39,54 @@ void	*monitor_philo()
 
 void	take_forks(t_philo *philo)
 {
-	pthread_mutex_lock(philo->info->forks_mutex + philo->num); // take fork R
-	pthread_mutex_lock(philo->info->forks_mutex + philo->num); // take fork L
+	pthread_mutex_lock(philo->info->forks_mutex + philo->num /* R */); // take fork R
+	pthread_mutex_lock(philo->info->forks_mutex + philo->num /* R */); // take fork L
 	philo->stat = FORKS;
-
+	print_message(philo, "has taken a fork");
 }
 
 void	eat(t_philo *philo)
 {
-
-	pthread_mutex_unlock(philo->info->forks_mutex + philo->num);
+	//mutex lock eatting
+	philo->stat = EAT;
+	usleep(TO_MSEC * philo->info->time_eat);
+	// FINISH_EAT
+	pthread_mutex_unlock(philo->info->forks_mutex + philo->num /* R */); // take fork L
+	pthread_mutex_unlock(philo->info->forks_mutex + philo->num /* R */); // take fork R
+	print_message(philo, "is eating");
+	philo->eat_cnt++;
 }
 
 void	sleep(t_philo *philo)
 {
 
+	philo->stat = SLEEP;
+	usleep(TO_MSEC * philo->info->time_sleep);
+	print_message(philo, "is sleeping");
 }
 
 void	think(t_philo *philo)
 {
-
+	philo->stat = THINK;
+	print_message(philo, "is thinking");
 }
 
 void	*philo_work(void *philo_void)
 {
 	pthread_t	tid;
+	t_philo		*p;
 
+	p = (t_philo *)philo_void;
 	if(pthread_create(tid, NULL, &monitor_philo, philo_void) != 0);
 		return ((void *)EXIT_FAILURE);
 	pthread_detach(tid);
 
-	while (1)
+	while (p->info->flag)
 	{
-		//take_forks();
-		//eat();
-		//sleep();
-		//think();
+		take_forks(philo_void);
+		eat(philo_void);
+		sleep(philo_void);
+		think(philo_void);
 	}
 	return ((void *)EXIT_SUCCESS);
 }
@@ -96,8 +126,6 @@ int	init_info(t_info *info, int argc, int *argv_num)
 	}
 
 }
-
-
 
 int	main(int argc, char **argv)
 {
