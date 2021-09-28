@@ -1,12 +1,15 @@
 #include <stdio.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <pthread.h>
 
-int main()
+int main(void)
 {
-	int i = 0;
-	printf("1");
-	i++;
-	printf("2");
-	printf("3");
-	printf("4");
-	printf("5");
+	char *str;
+
+	str = NULL;
+	str = "Hello World";
+	printf("%s\n", str);
+	return (0);
 }
