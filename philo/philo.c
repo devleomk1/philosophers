@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 16:37:35 by jisokang          #+#    #+#             */
-/*   Updated: 2021/09/28 11:44:47 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/09/28 16:08:53 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,51 @@
 
 //philosopher's number must start no.1
 
-static void	*philo_work(void *philo_void)
+void	*monitor_philo()
 {
-	int	*p;
 
-	p = (void *)philo_void;
+}
+
+void	take_forks(t_philo *philo)
+{
+	pthread_mutex_lock(philo->info->forks_mutex + philo->num); // take fork R
+	pthread_mutex_lock(philo->info->forks_mutex + philo->num); // take fork L
+	philo->stat = FORKS;
+
+}
+
+void	eat(t_philo *philo)
+{
+
+	pthread_mutex_unlock(philo->info->forks_mutex + philo->num);
+}
+
+void	sleep(t_philo *philo)
+{
+
+}
+
+void	think(t_philo *philo)
+{
+
+}
+
+void	*philo_work(void *philo_void)
+{
+	pthread_t	tid;
+
+	if(pthread_create(tid, NULL, &monitor_philo, philo_void) != 0);
+		return ((void *)EXIT_FAILURE);
+	pthread_detach(tid);
+
 	while (1)
 	{
+		//take_forks();
 		//eat();
 		//sleep();
 		//think();
 	}
-
-	return (0);
+	return ((void *)EXIT_SUCCESS);
 }
 
 int	init_info(t_info *info, int argc, int *argv_num)
@@ -58,10 +90,10 @@ int	init_info(t_info *info, int argc, int *argv_num)
 		info->philo[i].num = i + 1;
 		info->philo[i].eat_cnt = 0;
 		info->philo[i].stat = THINK;
+		info->philo[i].info = info;
 		//init_fork() here
 		pthread_mutex_init(info->forks_mutex + i, NULL);
 	}
-
 
 }
 

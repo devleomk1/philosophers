@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:54:15 by jisokang          #+#    #+#             */
-/*   Updated: 2021/09/28 11:42:55 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/09/28 15:47:09 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef struct s_philo
 	int		num;
 	int		stat;
 	int		eat_cnt;
+	t_info	*info;
 }			t_philo;
 
 typedef struct s_info
