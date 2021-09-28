@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 16:37:35 by jisokang          #+#    #+#             */
-/*   Updated: 2021/09/27 20:57:33 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/09/28 11:44:47 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ static void	*philo_work(void *philo_void)
 	int	*p;
 
 	p = (void *)philo_void;
-
 	while (1)
 	{
 		//eat();
@@ -41,7 +40,7 @@ int	init_info(t_info *info, int argc, int *argv_num)
 	if (argc != 6)
 		info->num_phi_eat = argv_num[NUM_PEAT];
 	else
-		info->num_phi_eat = -1; //define NAME
+		info->num_phi_eat = PEAT_INF;
 	// 이 부분 다시 이해해!
 	info->philo = (t_philo *)malloc(sizeof(t_philo) * info->num_philo);
 	if (info->philo == NULL)
@@ -62,6 +61,8 @@ int	init_info(t_info *info, int argc, int *argv_num)
 		//init_fork() here
 		pthread_mutex_init(info->forks_mutex + i, NULL);
 	}
+
+
 }
 
 

@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:54:15 by jisokang          #+#    #+#             */
-/*   Updated: 2021/09/27 21:17:38 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/09/28 11:42:55 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@
 # define TIME_EAT	3
 # define TIME_SLP	4
 # define NUM_PEAT	5
+
+# define PEAT_INF	-1
 
 # define THINK		0
 # define FORKS		1
