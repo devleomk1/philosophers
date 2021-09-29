@@ -6,19 +6,11 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/25 17:32:35 by jisokang          #+#    #+#             */
-/*   Updated: 2021/09/26 16:05:04 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/09/29 15:26:44 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-int	ft_isspace(char c)
-{
-	if (c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r' || c == ' ')
-		return (1);
-	else
-		return (0);
-}
 
 int	ft_atoi_philo(const char *str)
 {
@@ -27,8 +19,6 @@ int	ft_atoi_philo(const char *str)
 
 	result = 0;
 	i = 0;
-	while (str[i] != '\0' && ft_isspace(str[i]) == 1)
-		i++;
 	while (str[i] != '\0' && str[i] >= '0' && str[i] <= '9')
 	{
 		result = result * 10 + (str[i] - '0');
@@ -37,4 +27,12 @@ int	ft_atoi_philo(const char *str)
 		i++;
 	}
 	return (result);
+}
+
+uint64_t	get_time_ms(void)
+{
+	struct timeval	tv;
+
+	gettimeofday(&tv, NULL);
+	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }

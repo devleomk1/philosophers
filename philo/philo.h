@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:54:15 by jisokang          #+#    #+#             */
-/*   Updated: 2021/09/28 18:22:50 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/09/29 20:00:09 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,19 @@
 # define SLEEP		3
 # define DEAD		4
 
+struct s_info;
+
+
 typedef struct s_philo
 {
-	int		num;
-	int		stat;
-	int		eat_cnt;
-	t_info	*info;
-}			t_philo;
+	int				num;
+	int				stat;
+	int				eat_cnt;
+	uint64_t		eat_start_time;
+	uint64_t		slp_start_time;
+	struct s_info	*info;
+	pthread_mutex_t	eat_mutex;
+}					t_philo;
 
 typedef struct s_info
 {
@@ -54,13 +60,20 @@ typedef struct s_info
 	uint64_t		time_eat;
 	uint64_t		time_sleep;
 	int				num_phi_eat;
+	uint64_t		main_start_time;
 	pthread_mutex_t	die_mutex;
+	pthread_mutex_t print_mutex;
 	pthread_mutex_t	*forks_mutex; //포크는 여러개니까아
-	pthread_mutex_t	*eat_mutex;
-	int				flag;
 	t_philo			*philo;
 }					t_info;
 
-int		ft_atoi_philo(const char *str);
+void	philo_take_forks(t_philo *philo);
+void	philo_eat(t_philo *philo);
+void	philo_sleep(t_philo *philo);
+void	philo_think(t_philo *philo);
 
+/* UTIL */
+int			ft_atoi_philo(const char *str);
+uint64_t	get_time_ms(void);
+void	print_message(t_philo *philo, char *str);
 #endif

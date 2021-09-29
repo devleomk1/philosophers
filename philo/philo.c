@@ -6,89 +6,69 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 16:37:35 by jisokang          #+#    #+#             */
-/*   Updated: 2021/09/28 20:59:29 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/09/29 20:23:45 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
 //philosopher's number must start no.1
-
-uint64_t	get_time_ms(void)
-{
-	uint64_t		ms_sec;
-	struct timeval	tv;
-
-	gettimeofday(&tv, NULL);
-	ms_sec = tv.tv_sec * 1000 + tv.tv_usec / 1000;
-	return (ms_sec);
-}
+//usleep() -> while(get_time_ms - SET_TIME < 1000)
 
 void	print_message(t_philo *philo, char *str)
 {
-	// mutex lock
-	printf("%lums %d %s\n", get_time_ms(), philo->num, str);
-	// mutex unlock
+	pthread_mutex_lock(&(philo->info->print_mutex));
+	printf("%llums %d %s\n", get_time_ms() - philo->info->main_start_time, philo->num, str);
+	pthread_mutex_unlock(&(philo->info->print_mutex));	//if()	출력하기 싫으면 if걸어서 unlock 안하게 해!
 }
-
 
 void	*monitor_philo()
 {
-
+	return (0);
 }
 
-void	take_forks(t_philo *philo)
-{
-	pthread_mutex_lock(philo->info->forks_mutex + philo->num /* R */); // take fork R
-	pthread_mutex_lock(philo->info->forks_mutex + philo->num /* R */); // take fork L
-	philo->stat = FORKS;
-	print_message(philo, "has taken a fork");
-}
-
-void	eat(t_philo *philo)
-{
-	//mutex lock eatting
-	philo->stat = EAT;
-	usleep(TO_MSEC * philo->info->time_eat);
-	// FINISH_EAT
-	pthread_mutex_unlock(philo->info->forks_mutex + philo->num /* R */); // take fork L
-	pthread_mutex_unlock(philo->info->forks_mutex + philo->num /* R */); // take fork R
-	print_message(philo, "is eating");
-	philo->eat_cnt++;
-}
-
-void	sleep(t_philo *philo)
-{
-
-	philo->stat = SLEEP;
-	usleep(TO_MSEC * philo->info->time_sleep);
-	print_message(philo, "is sleeping");
-}
-
-void	think(t_philo *philo)
-{
-	philo->stat = THINK;
-	print_message(philo, "is thinking");
-}
-
-void	*philo_work(void *philo_void)
+void	*philo_routine(void *philo_void)
 {
 	pthread_t	tid;
 	t_philo		*p;
 
 	p = (t_philo *)philo_void;
-	if(pthread_create(tid, NULL, &monitor_philo, philo_void) != 0);
-		return ((void *)EXIT_FAILURE);
-	pthread_detach(tid);
-
-	while (p->info->flag)
+	// if(pthread_create(tid, NULL, &monitor_philo, philo_void) != 0);
+	// 	return ((void *)EXIT_FAILURE);
+	// pthread_detach(tid);
+	while (1)
 	{
-		take_forks(philo_void);
-		eat(philo_void);
-		sleep(philo_void);
-		think(philo_void);
+		philo_take_forks(philo_void);
+		philo_eat(philo_void);
+		philo_sleep(philo_void);
+		philo_think(philo_void);
+		usleep(100);
 	}
 	return ((void *)EXIT_SUCCESS);
+}
+
+int	run_philo(t_info *info, int p_num)
+{
+	void		*p;
+	pthread_t	tid;
+
+	while (p_num < info->num_philo)
+	{
+		p = (void*)(&(info->philo[p_num]));
+		pthread_create(&tid, NULL, &philo_routine, p);
+		pthread_detach(tid);
+		p_num += 2;
+	}
+	return(EXIT_SUCCESS);
+}
+
+void	thread_run(t_info *info)
+{
+	pthread_t	tid;
+
+	info->main_start_time = get_time_ms();
+	run_philo(info, 0);
+
 }
 
 int	init_info(t_info *info, int argc, int *argv_num)
@@ -121,10 +101,14 @@ int	init_info(t_info *info, int argc, int *argv_num)
 		info->philo[i].eat_cnt = 0;
 		info->philo[i].stat = THINK;
 		info->philo[i].info = info;
+		info->philo[i].eat_start_time = 0;
+		info->philo[i].slp_start_time = 0;
 		//init_fork() here
 		pthread_mutex_init(info->forks_mutex + i, NULL);
+		i++;
 	}
-
+	pthread_mutex_init(&(info->print_mutex), NULL);
+	return (0);
 }
 
 int	main(int argc, char **argv)
@@ -146,10 +130,10 @@ int	main(int argc, char **argv)
 		argv_num[i] = ft_atoi_philo(argv[i]);
 		i++;
 	}
-	if (init_info(&info, argc, argv_num) == EXIT_FAILURE);
+	if (init_info(&info, argc, argv_num) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-
-
+	thread_run(&info);
+	usleep(10000*1000);
 	//lock(_die.mutex)
 	//unlock(_die.mutex)
 	//바로 하는 이유
