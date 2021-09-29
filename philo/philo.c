@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 16:37:35 by jisokang          #+#    #+#             */
-/*   Updated: 2021/09/29 20:26:24 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/09/29 20:35:47 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	thread_run(t_info *info)
 
 	info->main_start_time = get_time_ms();
 	run_philo(info, 0);
-
+	run_philo(info, 1);
 }
 
 int	init_info(t_info *info, int argc, int *argv_num)
