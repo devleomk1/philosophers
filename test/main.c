@@ -17,11 +17,13 @@ uint64_t	get_time_ms(void)
 int main(void)
 {
 	uint64_t	start_time;
-	uint64_t	end_time;
+	uint64_t	now_time;
 
+	printf("Tik\n");
 	start_time = get_time_ms();
-	usleep(1000 * 1000);
-	end_time = get_time_ms();
-	printf("%llu\n", end_time - start_time);
-	return (0);
+	while (now_time <= 10000)
+	{
+		now_time = get_time_ms() - start_time;
+	}
+	printf("Tok!\n%llu\n", now_time);
 }
