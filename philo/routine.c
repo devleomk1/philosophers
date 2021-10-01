@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 13:48:44 by jisokang          #+#    #+#             */
-/*   Updated: 2021/09/29 16:40:54 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/09/30 01:07:11 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	philo_take_forks(t_philo *philo)
 	// pthread_mutex_lock(philo->info->forks_mutex + philo->num /* R */); // take fork R
 	// pthread_mutex_lock(philo->info->forks_mutex + philo->num /* R */); // take fork L
 	philo->stat = FORKS;
+	print_message(philo, "has taken a fork");
 	print_message(philo, "has taken a fork");
 }
 

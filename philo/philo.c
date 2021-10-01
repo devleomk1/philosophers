@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 16:37:35 by jisokang          #+#    #+#             */
-/*   Updated: 2021/09/29 20:35:47 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/10/01 23:16:47 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ void	*philo_routine(void *philo_void)
 	t_philo		*p;
 
 	p = (t_philo *)philo_void;
-	// if(pthread_create(tid, NULL, &monitor_philo, philo_void) != 0);
-	// 	return ((void *)EXIT_FAILURE);
-	// pthread_detach(tid);
+	if(pthread_create(&tid, NULL, &monitor_philo, philo_void) != 0)
+		return ((void *)EXIT_FAILURE);
+	pthread_detach(tid);
 	while (1)
 	{
 		philo_take_forks(philo_void);
@@ -64,7 +64,7 @@ int	run_philo(t_info *info, int p_num)
 
 void	thread_run(t_info *info)
 {
-	pthread_t	tid;
+	//pthread_t	tid;
 
 	info->main_start_time = get_time_ms();
 	run_philo(info, 0);
@@ -100,9 +100,9 @@ int	init_info(t_info *info, int argc, int *argv_num)
 		info->philo[i].num = i + 1;
 		info->philo[i].eat_cnt = 0;
 		info->philo[i].stat = THINK;
-		info->philo[i].info = info;
 		info->philo[i].eat_start_time = 0;
 		info->philo[i].slp_start_time = 0;
+		info->philo[i].info = info;
 		//init_fork() here
 		pthread_mutex_init(info->forks_mutex + i, NULL);
 		i++;
@@ -133,7 +133,7 @@ int	main(int argc, char **argv)
 	if (init_info(&info, argc, argv_num) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	thread_run(&info);
-	usleep(10000*1000);
+	usleep(10000*TO_MSEC);
 	//lock(_die.mutex)
 	//unlock(_die.mutex)
 	//바로 하는 이유
