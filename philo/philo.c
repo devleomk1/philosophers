@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 16:37:35 by jisokang          #+#    #+#             */
-/*   Updated: 2021/10/01 23:16:47 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/10/02 15:14:19 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,27 @@ void	print_message(t_philo *philo, char *str)
 {
 	pthread_mutex_lock(&(philo->info->print_mutex));
 	printf("%llums %d %s\n", get_time_ms() - philo->info->main_start_time, philo->num, str);
-	pthread_mutex_unlock(&(philo->info->print_mutex));	//if()	출력하기 싫으면 if걸어서 unlock 안하게 해!
+	if (philo->stat != DEAD)
+		pthread_mutex_unlock(&(philo->info->print_mutex));	//if()	출력하기 싫으면 if걸어서 unlock 안하게 해!
 }
 
-void	*monitor_philo()
+void	*monitor_philo(void *philo_void)
 {
-	return (0);
+	t_philo	*p;
+
+	p = (t_philo *)philo_void;
+	while (1)
+	{
+		pthread_mutex_lock(&(p->info->die_mutex));
+		if (get_time_ms() > p->died_time)
+		{
+			print_message(p, "dead");
+			p->stat = DEAD;
+			usleep(100);	//안하면 프린트하기도 전에
+			return (0);
+		}
+		pthread_mutex_unlock(&(p->info->die_mutex));
+	}
 }
 
 void	*philo_routine(void *philo_void)
@@ -33,6 +48,7 @@ void	*philo_routine(void *philo_void)
 	t_philo		*p;
 
 	p = (t_philo *)philo_void;
+	p->died_time = get_time_ms() + p->info->time_die;
 	if(pthread_create(&tid, NULL, &monitor_philo, philo_void) != 0)
 		return ((void *)EXIT_FAILURE);
 	pthread_detach(tid);
@@ -55,20 +71,22 @@ int	run_philo(t_info *info, int p_num)
 	while (p_num < info->num_philo)
 	{
 		p = (void*)(&(info->philo[p_num]));
-		pthread_create(&tid, NULL, &philo_routine, p);
+		if (pthread_create(&tid, NULL, &philo_routine, p) == 0)
+			return(EXIT_FAILURE);
 		pthread_detach(tid);
 		p_num += 2;
 	}
 	return(EXIT_SUCCESS);
 }
 
-void	thread_run(t_info *info)
+int	thread_run(t_info *info)
 {
 	//pthread_t	tid;
 
 	info->main_start_time = get_time_ms();
-	run_philo(info, 0);
-	run_philo(info, 1);
+	if (run_philo(info, 0) == EXIT_FAILURE || run_philo(info, 1) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
+	return(EXIT_SUCCESS);
 }
 
 int	init_info(t_info *info, int argc, int *argv_num)
@@ -108,6 +126,7 @@ int	init_info(t_info *info, int argc, int *argv_num)
 		i++;
 	}
 	pthread_mutex_init(&(info->print_mutex), NULL);
+	pthread_mutex_init(&(info->die_mutex), NULL);
 	return (0);
 }
 
@@ -133,7 +152,9 @@ int	main(int argc, char **argv)
 	if (init_info(&info, argc, argv_num) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	thread_run(&info);
-	usleep(10000*TO_MSEC);
+	usleep(1000*TO_MSEC);
+	pthread_mutex_lock(&(info.die_mutex));
+	pthread_mutex_unlock(&(info.die_mutex));
 	//lock(_die.mutex)
 	//unlock(_die.mutex)
 	//바로 하는 이유

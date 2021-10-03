@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/25 17:32:35 by jisokang          #+#    #+#             */
-/*   Updated: 2021/09/29 15:26:44 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/10/02 15:00:27 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int	ft_atoi_philo(const char *str)
 	return (result);
 }
 
+/* A function to get the current time in ms. */
 uint64_t	get_time_ms(void)
 {
 	struct timeval	tv;
