@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:54:15 by jisokang          #+#    #+#             */
-/*   Updated: 2021/10/02 15:07:16 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/10/04 17:44:27 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ typedef struct s_philo
 	uint64_t		died_time;
 	struct s_info	*info;
 	pthread_mutex_t	eat_mutex;
+	pthread_mutex_t	*r_fork;
+	pthread_mutex_t	*l_fork;
 }					t_philo;
 
 typedef struct s_info

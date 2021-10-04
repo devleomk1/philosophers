@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 13:48:44 by jisokang          #+#    #+#             */
-/*   Updated: 2021/09/30 01:07:11 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/10/04 18:18:00 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 void	philo_take_forks(t_philo *philo)
 {
-	// pthread_mutex_lock(philo->info->forks_mutex + philo->num /* R */); // take fork R
-	// pthread_mutex_lock(philo->info->forks_mutex + philo->num /* R */); // take fork L
+	pthread_mutex_lock(philo->r_fork);
+	print_message(philo, "has taken a fork R");
+	pthread_mutex_lock(philo->l_fork);
+	print_message(philo, "has taken a fork L");
 	philo->stat = FORKS;
-	print_message(philo, "has taken a fork");
-	print_message(philo, "has taken a fork");
 }
 
 void	philo_eat(t_philo *philo)
@@ -27,8 +27,8 @@ void	philo_eat(t_philo *philo)
 	philo->eat_start_time = get_time_ms();
 	while (get_time_ms() - philo->eat_start_time < philo->info->time_eat)
 		usleep(100);
-	// pthread_mutex_unlock(philo->info->forks_mutex + philo->num /* R */); // take fork L
-	// pthread_mutex_unlock(philo->info->forks_mutex + philo->num /* R */); // take fork R
+	pthread_mutex_unlock(philo->l_fork);
+	pthread_mutex_unlock(philo->r_fork);
 	print_message(philo, "is eating");
 	(philo->eat_cnt)++;
 }

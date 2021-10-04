@@ -6,14 +6,13 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 16:37:35 by jisokang          #+#    #+#             */
-/*   Updated: 2021/10/02 15:14:19 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/10/04 18:23:15 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
 //philosopher's number must start no.1
-//usleep() -> while(get_time_ms - SET_TIME < 1000)
 
 void	print_message(t_philo *philo, char *str)
 {
@@ -44,14 +43,14 @@ void	*monitor_philo(void *philo_void)
 
 void	*philo_routine(void *philo_void)
 {
-	pthread_t	tid;
-	t_philo		*p;
+	t_philo	*p;
+	//pthread_t	tid;
 
 	p = (t_philo *)philo_void;
 	p->died_time = get_time_ms() + p->info->time_die;
-	if(pthread_create(&tid, NULL, &monitor_philo, philo_void) != 0)
-		return ((void *)EXIT_FAILURE);
-	pthread_detach(tid);
+	//if(pthread_create(&tid, NULL, &monitor_philo, philo_void) != 0)
+	//	return ((void *)EXIT_FAILURE);
+	//pthread_detach(tid);
 	while (1)
 	{
 		philo_take_forks(philo_void);
@@ -70,23 +69,25 @@ int	run_philo(t_info *info, int p_num)
 
 	while (p_num < info->num_philo)
 	{
-		p = (void*)(&(info->philo[p_num]));
-		if (pthread_create(&tid, NULL, &philo_routine, p) == 0)
-			return(EXIT_FAILURE);
+		p = (void *)(&(info->philo[p_num]));
+		if (pthread_create(&tid, NULL, &philo_routine, p) != 0)
+			return (EXIT_FAILURE);
 		pthread_detach(tid);
 		p_num += 2;
 	}
-	return(EXIT_SUCCESS);
+	if (p_num % 2 == 0)
+		usleep(500 * info->time_eat);
+	return (EXIT_SUCCESS);
 }
 
 int	thread_run(t_info *info)
 {
 	//pthread_t	tid;
-
+	//monitor_must_eat();
 	info->main_start_time = get_time_ms();
 	if (run_philo(info, 0) == EXIT_FAILURE || run_philo(info, 1) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	return(EXIT_SUCCESS);
+	return (EXIT_SUCCESS);
 }
 
 int	init_info(t_info *info, int argc, int *argv_num)
@@ -101,15 +102,14 @@ int	init_info(t_info *info, int argc, int *argv_num)
 		info->num_phi_eat = argv_num[NUM_PEAT];
 	else
 		info->num_phi_eat = PEAT_INF;
-	// 이 부분 다시 이해해!
 	info->philo = (t_philo *)malloc(sizeof(t_philo) * info->num_philo);
 	if (info->philo == NULL)
-		return (EXIT_FAILURE);	//어떻게 나가게 만들지?
+		return (EXIT_FAILURE);
 	info->forks_mutex = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * info->num_philo);
 	if (info->forks_mutex == NULL)
 	{
 		free(info->philo);
-		return (EXIT_FAILURE);	//어떻게 나가게 만들지?
+		return (EXIT_FAILURE);
 	}
 	i = 0;
 	while (i < info->num_philo)
@@ -121,7 +121,11 @@ int	init_info(t_info *info, int argc, int *argv_num)
 		info->philo[i].eat_start_time = 0;
 		info->philo[i].slp_start_time = 0;
 		info->philo[i].info = info;
-		//init_fork() here
+		info->philo[i].r_fork = &(info->forks_mutex[i]);
+		if (i + 1 == info->num_philo)
+			info->philo[i].l_fork = &(info->forks_mutex[0]);
+		else
+			info->philo[i].l_fork = &(info->forks_mutex[i + 1]);
 		pthread_mutex_init(info->forks_mutex + i, NULL);
 		i++;
 	}
@@ -152,7 +156,7 @@ int	main(int argc, char **argv)
 	if (init_info(&info, argc, argv_num) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	thread_run(&info);
-	usleep(1000*TO_MSEC);
+	usleep(10000 * TO_MSEC);
 	pthread_mutex_lock(&(info.die_mutex));
 	pthread_mutex_unlock(&(info.die_mutex));
 	//lock(_die.mutex)
