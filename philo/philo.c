@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 16:37:35 by jisokang          #+#    #+#             */
-/*   Updated: 2021/10/04 18:23:15 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/10/04 20:02:55 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 void	print_message(t_philo *philo, char *str)
 {
 	pthread_mutex_lock(&(philo->info->print_mutex));
-	printf("%llums %d %s\n", get_time_ms() - philo->info->main_start_time, philo->num, str);
+	printf("%llums\t%d\t%s\n", get_time_ms() - philo->info->main_start_time, philo->num, str);
 	if (philo->stat != DEAD)
 		pthread_mutex_unlock(&(philo->info->print_mutex));	//if()	출력하기 싫으면 if걸어서 unlock 안하게 해!
 }
@@ -29,28 +29,26 @@ void	*monitor_philo(void *philo_void)
 	p = (t_philo *)philo_void;
 	while (1)
 	{
-		pthread_mutex_lock(&(p->info->die_mutex));
 		if (get_time_ms() > p->died_time)
 		{
-			print_message(p, "dead");
 			p->stat = DEAD;
+			print_message(p, "dead");
 			usleep(100);	//안하면 프린트하기도 전에
 			return (0);
 		}
-		pthread_mutex_unlock(&(p->info->die_mutex));
 	}
 }
 
 void	*philo_routine(void *philo_void)
 {
-	t_philo	*p;
-	//pthread_t	tid;
+	t_philo		*p;
+	pthread_t	tid;
 
 	p = (t_philo *)philo_void;
 	p->died_time = get_time_ms() + p->info->time_die;
-	//if(pthread_create(&tid, NULL, &monitor_philo, philo_void) != 0)
-	//	return ((void *)EXIT_FAILURE);
-	//pthread_detach(tid);
+	if(pthread_create(&tid, NULL, &monitor_philo, philo_void) != 0)
+		return ((void *)EXIT_FAILURE);
+	pthread_detach(tid);
 	while (1)
 	{
 		philo_take_forks(philo_void);
@@ -131,6 +129,7 @@ int	init_info(t_info *info, int argc, int *argv_num)
 	}
 	pthread_mutex_init(&(info->print_mutex), NULL);
 	pthread_mutex_init(&(info->die_mutex), NULL);
+	pthread_mutex_lock(&(info->die_mutex));		//
 	return (0);
 }
 
@@ -156,7 +155,7 @@ int	main(int argc, char **argv)
 	if (init_info(&info, argc, argv_num) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	thread_run(&info);
-	usleep(10000 * TO_MSEC);
+	usleep(100000);
 	pthread_mutex_lock(&(info.die_mutex));
 	pthread_mutex_unlock(&(info.die_mutex));
 	//lock(_die.mutex)
