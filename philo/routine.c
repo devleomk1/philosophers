@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 13:48:44 by jisokang          #+#    #+#             */
-/*   Updated: 2021/10/04 18:18:00 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/10/05 18:03:17 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ void	philo_eat(t_philo *philo)
 		usleep(100);
 	pthread_mutex_unlock(philo->l_fork);
 	pthread_mutex_unlock(philo->r_fork);
-	print_message(philo, "is eating");
+	print_message(philo, "is eating\t");
+	philo->died_time = get_time_ms() + philo->info->time_die;
 	(philo->eat_cnt)++;
 }
 
@@ -39,11 +40,11 @@ void	philo_sleep(t_philo *philo)
 	philo->slp_start_time = get_time_ms();
 	while (get_time_ms() - philo->slp_start_time < philo->info->time_sleep)
 		usleep(100);
-	print_message(philo, "is sleeping");
+	print_message(philo, "is sleeping\t");
 }
 
 void	philo_think(t_philo *philo)
 {
 	philo->stat = THINK;
-	print_message(philo, "is thinking");
+	print_message(philo, "is thinking\t");
 }

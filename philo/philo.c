@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 16:37:35 by jisokang          #+#    #+#             */
-/*   Updated: 2021/10/04 20:02:55 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/10/05 18:10:09 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,10 @@
 void	print_message(t_philo *philo, char *str)
 {
 	pthread_mutex_lock(&(philo->info->print_mutex));
-	printf("%llums\t%d\t%s\n", get_time_ms() - philo->info->main_start_time, philo->num, str);
+	if (philo->num == 2)
+		printf(YELLOW"%llums\t%d\t%s\t[%d]\n"RESET, get_time_ms() - philo->info->main_start_time, philo->num, str, philo->eat_cnt);
+	else
+		printf("%llums\t%d\t%s\t[%d]\n", get_time_ms() - philo->info->main_start_time, philo->num, str, philo->eat_cnt);
 	if (philo->stat != DEAD)
 		pthread_mutex_unlock(&(philo->info->print_mutex));	//if()	출력하기 싫으면 if걸어서 unlock 안하게 해!
 }
@@ -34,6 +37,7 @@ void	*monitor_philo(void *philo_void)
 			p->stat = DEAD;
 			print_message(p, "dead");
 			usleep(100);	//안하면 프린트하기도 전에
+			pthread_mutex_unlock(&(p->info->die_mutex));
 			return (0);
 		}
 	}
@@ -129,7 +133,7 @@ int	init_info(t_info *info, int argc, int *argv_num)
 	}
 	pthread_mutex_init(&(info->print_mutex), NULL);
 	pthread_mutex_init(&(info->die_mutex), NULL);
-	pthread_mutex_lock(&(info->die_mutex));		//
+	pthread_mutex_lock(&(info->die_mutex));
 	return (0);
 }
 
@@ -154,12 +158,11 @@ int	main(int argc, char **argv)
 	}
 	if (init_info(&info, argc, argv_num) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	thread_run(&info);
+	if (thread_run(&info) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
 	usleep(100000);
 	pthread_mutex_lock(&(info.die_mutex));
 	pthread_mutex_unlock(&(info.die_mutex));
-	//lock(_die.mutex)
-	//unlock(_die.mutex)
 	//바로 하는 이유
 	//init에서 lock을 하면 unlock이 되기전까지 main()문이 멈춤.
 	return (EXIT_SUCCESS);
