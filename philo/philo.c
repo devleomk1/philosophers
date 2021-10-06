@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 16:37:35 by jisokang          #+#    #+#             */
-/*   Updated: 2021/10/05 18:10:09 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/10/06 17:21:40 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,29 @@
 
 //philosopher's number must start no.1
 
-void	print_message(t_philo *philo, char *str)
+void	*monitor_must_eat(void *philo_void)
 {
-	pthread_mutex_lock(&(philo->info->print_mutex));
-	if (philo->num == 2)
-		printf(YELLOW"%llums\t%d\t%s\t[%d]\n"RESET, get_time_ms() - philo->info->main_start_time, philo->num, str, philo->eat_cnt);
-	else
-		printf("%llums\t%d\t%s\t[%d]\n", get_time_ms() - philo->info->main_start_time, philo->num, str, philo->eat_cnt);
-	if (philo->stat != DEAD)
-		pthread_mutex_unlock(&(philo->info->print_mutex));	//if()	출력하기 싫으면 if걸어서 unlock 안하게 해!
+	t_philo	*p;
+
+	p = (t_philo *)philo_void;
+	// while (p->info->num_phi_full != p->info->num_philo)
+	while (1)
+	{
+		if (p->info->num_phi_full == p->info->num_philo)
+		{
+			pthread_mutex_lock(&(p->info->print_mutex));
+			printf(BLUE"ALL PHILOS FULL\n"RESET);
+			usleep(100);
+			pthread_mutex_unlock(&(p->info->die_mutex));
+			return (0);
+		}
+		if (p->eat_cnt == p->info->num_phi_eat && p->starve == FILL)
+		{
+			p->starve = FULL;
+			(p->info->num_phi_full)++;
+		}
+	}
+	return (0);
 }
 
 void	*monitor_philo(void *philo_void)
@@ -35,7 +49,7 @@ void	*monitor_philo(void *philo_void)
 		if (get_time_ms() > p->died_time)
 		{
 			p->stat = DEAD;
-			print_message(p, "dead");
+			print_message(p, "dead\t\t");
 			usleep(100);	//안하면 프린트하기도 전에
 			pthread_mutex_unlock(&(p->info->die_mutex));
 			return (0);
@@ -50,8 +64,11 @@ void	*philo_routine(void *philo_void)
 
 	p = (t_philo *)philo_void;
 	p->died_time = get_time_ms() + p->info->time_die;
-	if(pthread_create(&tid, NULL, &monitor_philo, philo_void) != 0)
+	if (pthread_create(&tid, NULL, &monitor_philo, philo_void) != 0)
 		return ((void *)EXIT_FAILURE);
+	pthread_detach(tid);
+	if (pthread_create(&tid, NULL, &monitor_must_eat, philo_void) != 0)
+		return ((void *)EXIT_SUCCESS);
 	pthread_detach(tid);
 	while (1)
 	{
@@ -101,9 +118,10 @@ int	init_info(t_info *info, int argc, int *argv_num)
 	info->time_eat = argv_num[TIME_EAT];
 	info->time_sleep = argv_num[TIME_SLP];
 	if (argc != 6)
-		info->num_phi_eat = argv_num[NUM_PEAT];
-	else
 		info->num_phi_eat = PEAT_INF;
+	else
+		info->num_phi_eat = argv_num[NUM_PEAT];
+	info->num_phi_full = 0;
 	info->philo = (t_philo *)malloc(sizeof(t_philo) * info->num_philo);
 	if (info->philo == NULL)
 		return (EXIT_FAILURE);
@@ -120,6 +138,7 @@ int	init_info(t_info *info, int argc, int *argv_num)
 		info->philo[i].num = i + 1;
 		info->philo[i].eat_cnt = 0;
 		info->philo[i].stat = THINK;
+		info->philo[i].starve = FILL;
 		info->philo[i].eat_start_time = 0;
 		info->philo[i].slp_start_time = 0;
 		info->philo[i].info = info;
@@ -134,7 +153,17 @@ int	init_info(t_info *info, int argc, int *argv_num)
 	pthread_mutex_init(&(info->print_mutex), NULL);
 	pthread_mutex_init(&(info->die_mutex), NULL);
 	pthread_mutex_lock(&(info->die_mutex));
+	printf("TIME\tPHILO\tSTATUS\t\t\tEAT_CNT\n");
+	printf("===============================================\n");
 	return (0);
+}
+
+int	print_usage(int exit_return)
+{
+	printf("Wrong argument! Please check usage.\n"\
+		YELLOW"Usage: ./philo [num_philos] [time_die] [time_eat]"\
+		" [time_sleep] [num_each_philos_eat(optional)]\n"RESET);
+	return (exit_return);
 }
 
 int	main(int argc, char **argv)
@@ -144,12 +173,7 @@ int	main(int argc, char **argv)
 	t_info		info;
 
 	if (argc < 5 || argc > 6)
-	{
-		printf("Wrong argument! Please check usage.\n"\
-			YELLOW"Usage: ./philo [num_philos] [time_die] [time_eat]"\
-			" [time_sleep] [num_each_philos_eat(optional)]\n"RESET);
-		return (EXIT_FAILURE);
-	}
+		return (print_usage(EXIT_FAILURE));
 	i = 1;
 	while (i < argc)
 	{
@@ -162,7 +186,7 @@ int	main(int argc, char **argv)
 		return (EXIT_FAILURE);
 	usleep(100000);
 	pthread_mutex_lock(&(info.die_mutex));
-	pthread_mutex_unlock(&(info.die_mutex));
+	// pthread_mutex_unlock(&(info.die_mutex)); -> 없어도 돌아감
 	//바로 하는 이유
 	//init에서 lock을 하면 unlock이 되기전까지 main()문이 멈춤.
 	return (EXIT_SUCCESS);

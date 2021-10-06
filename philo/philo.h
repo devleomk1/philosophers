@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:54:15 by jisokang          #+#    #+#             */
-/*   Updated: 2021/10/04 17:44:27 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/10/06 16:47:17 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,6 @@
 # include <sys/time.h>
 # include "color.h"
 
-# define ERROR		-1
-# define TRUE		1
-# define FALSE		0
 # define TO_MSEC	1000
 
 # define NUM_PHIL	1
@@ -39,19 +36,21 @@
 # define SLEEP		3
 # define DEAD		4
 
-struct s_info;
+# define FILL		0
+# define FULL		1
 
+struct s_info;
 
 typedef struct s_philo
 {
 	int				num;
 	int				stat;
+	int				starve;
 	int				eat_cnt;
 	uint64_t		eat_start_time;
 	uint64_t		slp_start_time;
-	uint64_t		died_time;
+	uint64_t		died_time;	//줄일수 있을지도..?
 	struct s_info	*info;
-	pthread_mutex_t	eat_mutex;
 	pthread_mutex_t	*r_fork;
 	pthread_mutex_t	*l_fork;
 }					t_philo;
@@ -62,21 +61,23 @@ typedef struct s_info
 	uint64_t		time_die;
 	uint64_t		time_eat;
 	uint64_t		time_sleep;
-	int				num_phi_eat;
+	int				num_phi_eat; //change name : num_must_eat
+	int				num_phi_full;
 	uint64_t		main_start_time;
 	pthread_mutex_t	die_mutex;
 	pthread_mutex_t print_mutex;
-	pthread_mutex_t	*forks_mutex; //포크는 여러개니까아
+	pthread_mutex_t	*forks_mutex;
 	t_philo			*philo;
 }					t_info;
 
-void	philo_take_forks(t_philo *philo);
-void	philo_eat(t_philo *philo);
-void	philo_sleep(t_philo *philo);
-void	philo_think(t_philo *philo);
+/* ROUTINE */
+void		philo_take_forks(t_philo *philo);
+void		philo_eat(t_philo *philo);
+void		philo_sleep(t_philo *philo);
+void		philo_think(t_philo *philo);
 
 /* UTIL */
+void		print_message(t_philo *philo, char *str);
 int			ft_atoi_philo(const char *str);
 uint64_t	get_time_ms(void);
-void	print_message(t_philo *philo, char *str);
 #endif
