@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 13:48:44 by jisokang          #+#    #+#             */
-/*   Updated: 2021/10/05 18:03:17 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/10/07 11:01:59 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,11 @@ void	philo_eat(t_philo *philo)
 	print_message(philo, "is eating\t");
 	philo->died_time = get_time_ms() + philo->info->time_die;
 	(philo->eat_cnt)++;
+	if (philo->eat_cnt == philo->info->num_phi_eat && philo->starve == FILL)
+	{
+		philo->starve = FULL;
+		(philo->info->num_phi_full)++;
+	}
 }
 
 void	philo_sleep(t_philo *philo)

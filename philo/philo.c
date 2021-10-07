@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 16:37:35 by jisokang          #+#    #+#             */
-/*   Updated: 2021/10/06 17:21:40 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/10/07 11:16:00 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,7 @@ void	*monitor_must_eat(void *philo_void)
 	// while (p->info->num_phi_full != p->info->num_philo)
 	while (1)
 	{
-		if (p->info->num_phi_full == p->info->num_philo)
-		{
-			pthread_mutex_lock(&(p->info->print_mutex));
-			printf(BLUE"ALL PHILOS FULL\n"RESET);
-			usleep(100);
-			pthread_mutex_unlock(&(p->info->die_mutex));
-			return (0);
-		}
+
 		if (p->eat_cnt == p->info->num_phi_eat && p->starve == FILL)
 		{
 			p->starve = FULL;
@@ -46,6 +39,14 @@ void	*monitor_philo(void *philo_void)
 	p = (t_philo *)philo_void;
 	while (1)
 	{
+		if (p->info->num_phi_full == p->info->num_philo)
+		{
+			pthread_mutex_lock(&(p->info->print_mutex));
+			printf(BLUE"🍝All philosophers have finished their meals.\n"RESET);
+			usleep(100);
+			pthread_mutex_unlock(&(p->info->die_mutex));
+			return (0);
+		}
 		if (get_time_ms() > p->died_time)
 		{
 			p->stat = DEAD;
@@ -66,9 +67,6 @@ void	*philo_routine(void *philo_void)
 	p->died_time = get_time_ms() + p->info->time_die;
 	if (pthread_create(&tid, NULL, &monitor_philo, philo_void) != 0)
 		return ((void *)EXIT_FAILURE);
-	pthread_detach(tid);
-	if (pthread_create(&tid, NULL, &monitor_must_eat, philo_void) != 0)
-		return ((void *)EXIT_SUCCESS);
 	pthread_detach(tid);
 	while (1)
 	{
@@ -101,8 +99,6 @@ int	run_philo(t_info *info, int p_num)
 
 int	thread_run(t_info *info)
 {
-	//pthread_t	tid;
-	//monitor_must_eat();
 	info->main_start_time = get_time_ms();
 	if (run_philo(info, 0) == EXIT_FAILURE || run_philo(info, 1) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
