@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 16:37:35 by jisokang          #+#    #+#             */
-/*   Updated: 2021/10/08 02:07:58 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/10/08 02:17:00 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ static void	destroy_mutex_all(t_info *info)
 		pthread_mutex_destroy(&(info->forks_mutex[i++]));
 	pthread_mutex_destroy(&(info->die_mutex));
 	pthread_mutex_destroy(&(info->print_mutex));
-	free(&(info->forks_mutex));
-	free(&(info->philo));
+	free(info->forks_mutex);
+	free(info->philo);
 }
 
 int	print_usage(int exit_return)

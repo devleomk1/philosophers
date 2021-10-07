@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/08 01:26:40 by jisokang          #+#    #+#             */
-/*   Updated: 2021/10/08 01:31:41 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/10/08 02:20:13 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	*monitor_philo(void *philo_void)
 			printf(BLUE"🍝All philosophers have finished their meals.\n"RESET);
 			usleep(100);
 			pthread_mutex_unlock(&(p->info->die_mutex));
-			return (0);
+			return (EXIT_SUCCESS);
 		}
 		if (get_time_ms() - p->diecnt_start_time > p->info->time_die)
 		{
@@ -33,7 +33,7 @@ static void	*monitor_philo(void *philo_void)
 			print_message(p, "dead\t\t");
 			usleep(100);
 			pthread_mutex_unlock(&(p->info->die_mutex));
-			return (0);
+			return (EXIT_SUCCESS);
 		}
 		usleep(100);
 	}
