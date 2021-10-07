@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 13:48:44 by jisokang          #+#    #+#             */
-/*   Updated: 2021/10/07 16:47:50 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/10/07 20:09:45 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	philo_eat(t_philo *p)
 	while (get_time_ms() - p->diecnt_start_time < p->info->time_eat)
 		usleep(100);
 	(p->eat_cnt)++;
-	if (p->eat_cnt == p->info->num_phi_eat && p->starve == FILL)
+	if (p->eat_cnt == p->info->num_must_eat && p->starve == FILL)
 	{
 		p->starve = FULL;
 		(p->info->num_phi_full)++;

@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 16:37:35 by jisokang          #+#    #+#             */
-/*   Updated: 2021/10/07 17:06:30 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/10/07 20:01:16 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,54 +86,6 @@ int	thread_run(t_info *info)
 	if (run_philo(info, 0) == EXIT_FAILURE || run_philo(info, 1) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
-}
-
-int	init_info(t_info *info, int argc, int *argv_num)
-{
-	int	i;
-
-	info->num_philo = argv_num[NUM_PHIL];
-	info->time_die = argv_num[TIME_DIE];
-	info->time_eat = argv_num[TIME_EAT];
-	info->time_sleep = argv_num[TIME_SLP];
-	if (argc != 6)
-		info->num_phi_eat = PEAT_INF;
-	else
-		info->num_phi_eat = argv_num[NUM_PEAT];
-	info->num_phi_full = 0;
-	info->philo = (t_philo *)malloc(sizeof(t_philo) * info->num_philo);
-	if (info->philo == NULL)
-		return (EXIT_FAILURE);
-	info->forks_mutex = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * info->num_philo);
-	if (info->forks_mutex == NULL)
-	{
-		free(info->philo);
-		return (EXIT_FAILURE);
-	}
-	i = 0;
-	while (i < info->num_philo)
-	{
-		//init_philo()
-		info->philo[i].num = i + 1;
-		info->philo[i].eat_cnt = 0;
-		info->philo[i].stat = THINK;
-		info->philo[i].starve = FILL;
-		// info->philo[i].diecnt_start_time = 0;
-		info->philo[i].info = info;
-		info->philo[i].r_fork = &(info->forks_mutex[i]);
-		if (i + 1 == info->num_philo)
-			info->philo[i].l_fork = &(info->forks_mutex[0]);
-		else
-			info->philo[i].l_fork = &(info->forks_mutex[i + 1]);
-		pthread_mutex_init(info->forks_mutex + i, NULL);
-		i++;
-	}
-	pthread_mutex_init(&(info->print_mutex), NULL);
-	pthread_mutex_init(&(info->die_mutex), NULL);
-	pthread_mutex_lock(&(info->die_mutex));
-	printf("TIME\tPHILO\tSTATUS\t\t\tEAT_CNT\n");
-	printf("===============================================\n");
-	return (0);
 }
 
 int	print_usage(int exit_return)
