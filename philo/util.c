@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/25 17:32:35 by jisokang          #+#    #+#             */
-/*   Updated: 2021/10/06 15:02:38 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/10/07 11:33:11 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	print_message(t_philo *philo, char *str)
 	else
 		printf("%llums\t%d\t%s\t[%d]\n", get_time_ms() - philo->info->main_start_time, philo->num, str, philo->eat_cnt);
 	if (philo->stat != DEAD)
-		pthread_mutex_unlock(&(philo->info->print_mutex));	//if()	출력하기 싫으면 if걸어서 unlock 안하게 해!
+		pthread_mutex_unlock(&(philo->info->print_mutex));
 }
 
 int	ft_atoi_philo(const char *str)

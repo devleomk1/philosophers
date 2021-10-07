@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:54:15 by jisokang          #+#    #+#             */
-/*   Updated: 2021/10/06 16:47:17 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/10/07 16:22:31 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,7 @@ typedef struct s_philo
 	int				stat;
 	int				starve;
 	int				eat_cnt;
-	uint64_t		eat_start_time;
-	uint64_t		slp_start_time;
-	uint64_t		died_time;	//줄일수 있을지도..?
+	uint64_t		diecnt_start_time;
 	struct s_info	*info;
 	pthread_mutex_t	*r_fork;
 	pthread_mutex_t	*l_fork;

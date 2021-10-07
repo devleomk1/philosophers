@@ -6,50 +6,51 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 13:48:44 by jisokang          #+#    #+#             */
-/*   Updated: 2021/10/07 11:01:59 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/10/07 16:47:50 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	philo_take_forks(t_philo *philo)
+void	philo_take_forks(t_philo *p)
 {
-	pthread_mutex_lock(philo->r_fork);
-	print_message(philo, "has taken a fork R");
-	pthread_mutex_lock(philo->l_fork);
-	print_message(philo, "has taken a fork L");
-	philo->stat = FORKS;
+	pthread_mutex_lock(p->r_fork);
+	print_message(p, "has taken a fork R");
+	pthread_mutex_lock(p->l_fork);
+	print_message(p, "has taken a fork L");
+	p->stat = FORKS;
 }
 
-void	philo_eat(t_philo *philo)
+void	philo_eat(t_philo *p)
 {
-	philo->stat = EAT;
-	philo->eat_start_time = get_time_ms();
-	while (get_time_ms() - philo->eat_start_time < philo->info->time_eat)
+	p->stat = EAT;
+	p->diecnt_start_time = get_time_ms();
+	print_message(p, "is eating\t");
+	while (get_time_ms() - p->diecnt_start_time < p->info->time_eat)
 		usleep(100);
-	pthread_mutex_unlock(philo->l_fork);
-	pthread_mutex_unlock(philo->r_fork);
-	print_message(philo, "is eating\t");
-	philo->died_time = get_time_ms() + philo->info->time_die;
-	(philo->eat_cnt)++;
-	if (philo->eat_cnt == philo->info->num_phi_eat && philo->starve == FILL)
+	(p->eat_cnt)++;
+	if (p->eat_cnt == p->info->num_phi_eat && p->starve == FILL)
 	{
-		philo->starve = FULL;
-		(philo->info->num_phi_full)++;
+		p->starve = FULL;
+		(p->info->num_phi_full)++;
 	}
+	pthread_mutex_unlock(p->l_fork);
+	pthread_mutex_unlock(p->r_fork);
 }
 
-void	philo_sleep(t_philo *philo)
+void	philo_sleep(t_philo *p)
 {
-	philo->stat = SLEEP;
-	philo->slp_start_time = get_time_ms();
-	while (get_time_ms() - philo->slp_start_time < philo->info->time_sleep)
+	uint64_t	slp_start_time;
+
+	p->stat = SLEEP;
+	slp_start_time = get_time_ms();
+	print_message(p, "is sleeping\t");
+	while (get_time_ms() - slp_start_time < p->info->time_sleep)
 		usleep(100);
-	print_message(philo, "is sleeping\t");
 }
 
-void	philo_think(t_philo *philo)
+void	philo_think(t_philo *p)
 {
-	philo->stat = THINK;
-	print_message(philo, "is thinking\t");
+	p->stat = THINK;
+	print_message(p, "is thinking\t");
 }

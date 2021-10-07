@@ -6,31 +6,13 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 16:37:35 by jisokang          #+#    #+#             */
-/*   Updated: 2021/10/07 11:16:00 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/10/07 17:06:30 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
 //philosopher's number must start no.1
-
-void	*monitor_must_eat(void *philo_void)
-{
-	t_philo	*p;
-
-	p = (t_philo *)philo_void;
-	// while (p->info->num_phi_full != p->info->num_philo)
-	while (1)
-	{
-
-		if (p->eat_cnt == p->info->num_phi_eat && p->starve == FILL)
-		{
-			p->starve = FULL;
-			(p->info->num_phi_full)++;
-		}
-	}
-	return (0);
-}
 
 void	*monitor_philo(void *philo_void)
 {
@@ -47,14 +29,15 @@ void	*monitor_philo(void *philo_void)
 			pthread_mutex_unlock(&(p->info->die_mutex));
 			return (0);
 		}
-		if (get_time_ms() > p->died_time)
+		if (get_time_ms() - p->diecnt_start_time > p->info->time_die)
 		{
 			p->stat = DEAD;
 			print_message(p, "dead\t\t");
-			usleep(100);	//안하면 프린트하기도 전에
+			usleep(100);
 			pthread_mutex_unlock(&(p->info->die_mutex));
 			return (0);
 		}
+		usleep(100);
 	}
 }
 
@@ -64,7 +47,7 @@ void	*philo_routine(void *philo_void)
 	pthread_t	tid;
 
 	p = (t_philo *)philo_void;
-	p->died_time = get_time_ms() + p->info->time_die;
+	p->diecnt_start_time = p->info->main_start_time;
 	if (pthread_create(&tid, NULL, &monitor_philo, philo_void) != 0)
 		return ((void *)EXIT_FAILURE);
 	pthread_detach(tid);
@@ -135,8 +118,7 @@ int	init_info(t_info *info, int argc, int *argv_num)
 		info->philo[i].eat_cnt = 0;
 		info->philo[i].stat = THINK;
 		info->philo[i].starve = FILL;
-		info->philo[i].eat_start_time = 0;
-		info->philo[i].slp_start_time = 0;
+		// info->philo[i].diecnt_start_time = 0;
 		info->philo[i].info = info;
 		info->philo[i].r_fork = &(info->forks_mutex[i]);
 		if (i + 1 == info->num_philo)
@@ -182,7 +164,7 @@ int	main(int argc, char **argv)
 		return (EXIT_FAILURE);
 	usleep(100000);
 	pthread_mutex_lock(&(info.die_mutex));
-	// pthread_mutex_unlock(&(info.die_mutex)); -> 없어도 돌아감
+	pthread_mutex_unlock(&(info.die_mutex));
 	//바로 하는 이유
 	//init에서 lock을 하면 unlock이 되기전까지 main()문이 멈춤.
 	return (EXIT_SUCCESS);
