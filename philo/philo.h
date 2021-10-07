@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:54:15 by jisokang          #+#    #+#             */
-/*   Updated: 2021/10/07 20:10:56 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/10/08 02:01:30 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,9 @@ typedef struct s_info
 	pthread_mutex_t	*forks_mutex;
 	t_philo			*philo;
 }					t_info;
+
+/* THREAD */
+int			thread_run(t_info *info);
 
 /* INIT */
 int			init_info(t_info *info, int argc, int *argv_num);
