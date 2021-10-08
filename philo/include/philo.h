@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:54:15 by jisokang          #+#    #+#             */
-/*   Updated: 2021/10/08 02:01:30 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/10/08 20:12:29 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <sys/time.h>
 # include "color.h"
 
-# define TO_MSEC	1000
+# define TO_MSEC		1000
 
 # define NUM_PHIL		1
 # define TIME_DIE		2
