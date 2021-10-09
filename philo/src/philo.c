@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 16:37:35 by jisokang          #+#    #+#             */
-/*   Updated: 2021/10/08 02:17:00 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/10/09 11:54:51 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static void	destroy_mutex_all(t_info *info)
 
 int	print_usage(int exit_return)
 {
-	printf("Wrong argument! Please check usage.\n"\
+	printf(RED"Wrong argument! Please check usage.\n"\
 		YELLOW"Usage: ./philo [num_philos] [time_die] [time_eat]"\
 		" [time_sleep] [num_each_philos_eat(optional)]\n"RESET);
 	return (exit_return);
@@ -45,6 +45,8 @@ int	main(int argc, char **argv)
 	while (i < argc)
 	{
 		argv_num[i] = ft_atoi_philo(argv[i]);
+		if (argv_num[i] == 0)
+			return (print_usage(EXIT_FAILURE));
 		i++;
 	}
 	if (init_info(&info, argc, argv_num) == EXIT_FAILURE)
