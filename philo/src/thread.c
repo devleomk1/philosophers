@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/08 01:26:40 by jisokang          #+#    #+#             */
-/*   Updated: 2021/10/08 02:20:13 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/10/09 13:21:03 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static void	*philo_routine(void *philo_void)
 
 	p = (t_philo *)philo_void;
 	p->diecnt_start_time = p->info->main_start_time;
-	if (pthread_create(&tid, NULL, &monitor_philo, philo_void) != 0)
+	if (pthread_create(&tid, NULL, &monitor_philo, philo_void) != PTH_SUCCESS)
 		return ((void *)EXIT_FAILURE);
 	pthread_detach(tid);
 	while (1)
@@ -68,7 +68,7 @@ static int	run_philo(t_info *info, int p_num)
 	while (p_num < info->num_philo)
 	{
 		p = (void *)(&(info->philo[p_num]));
-		if (pthread_create(&tid, NULL, &philo_routine, p) != 0)
+		if (pthread_create(&tid, NULL, &philo_routine, p) != PTH_SUCCESS)
 			return (EXIT_FAILURE);
 		pthread_detach(tid);
 		p_num += 2;
