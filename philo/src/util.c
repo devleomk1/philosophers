@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/25 17:32:35 by jisokang          #+#    #+#             */
-/*   Updated: 2021/10/12 16:39:37 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/10/12 21:30:53 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,24 @@
 
 void	print_message(t_philo *p, char *str)
 {
+	(void)str;
+	if (p->info->end) { return; }
+	// printf("############ %d ++print_msg\n", p->num);
 	if (pthread_mutex_lock(&(p->info->print_mutex)) == PTH_SUCCESS)
 	{
 		printf("%llums\t%d\t%s\t[%d]\n",
 		get_time_ms() - p->info->main_start_time, p->num, str, p->eat_cnt);
 		if (p->stat != DEAD)
+		{
+			// printf("############ %d --print_msg\n", p->num);
 			pthread_mutex_unlock(&(p->info->print_mutex));
+		}
+		else
+		{
+			pthread_mutex_unlock(&(p->info->print_mutex));
+			pthread_mutex_destroy(&(p->info->print_mutex));
+		}
+
 	}
 }
 

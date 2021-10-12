@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 15:37:09 by jisokang          #+#    #+#             */
-/*   Updated: 2021/10/08 20:12:15 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/10/12 20:34:37 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ int	init_info(t_info *info, int argc, int *argv_num)
 	else
 		info->num_must_eat = argv_num[NUM_PEAT];
 	info->num_phi_full = 0;
+	info->end = FALSE;
 	if (malloc_philos_forks(info) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	if (init_philos_forks(info) == EXIT_FAILURE)

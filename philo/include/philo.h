@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:54:15 by jisokang          #+#    #+#             */
-/*   Updated: 2021/10/08 20:12:29 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/10/12 19:36:48 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,9 @@
 # define FILL			0
 # define FULL			1
 
+# define FALSE			0
+# define TRUE			1
+
 # define PTH_SUCCESS	0
 
 struct	s_info;
@@ -63,6 +66,7 @@ typedef struct s_info
 	uint64_t		time_sleep;
 	int				num_must_eat;
 	int				num_phi_full;
+	int				end;
 	uint64_t		main_start_time;
 	pthread_mutex_t	die_mutex;
 	pthread_mutex_t	print_mutex;

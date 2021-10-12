@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/08 01:26:40 by jisokang          #+#    #+#             */
-/*   Updated: 2021/10/09 13:21:03 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/10/12 21:34:14 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,20 @@ static void	*monitor_philo(void *philo_void)
 	{
 		if (p->info->num_phi_full == p->info->num_philo)
 		{
-			pthread_mutex_lock(&(p->info->print_mutex));
-			printf(BLUE"🍝All philosophers have finished their meals.\n"RESET);
-			usleep(100);
-			pthread_mutex_unlock(&(p->info->die_mutex));
-			return (EXIT_SUCCESS);
+			if (pthread_mutex_lock(&(p->info->print_mutex)) == PTH_SUCCESS)
+			{
+				printf(BLUE"🍝All philosophers have finished their meals.\n"RESET);
+				usleep(100);
+				pthread_mutex_unlock(&(p->info->die_mutex));
+				return (EXIT_SUCCESS);
+			}
+			return ((void *)EXIT_FAILURE);
 		}
 		if (get_time_ms() - p->diecnt_start_time > p->info->time_die)
 		{
 			p->stat = DEAD;
 			print_message(p, "dead\t\t");
+			p->info->end = TRUE;
 			usleep(100);
 			pthread_mutex_unlock(&(p->info->die_mutex));
 			return (EXIT_SUCCESS);
@@ -49,7 +53,7 @@ static void	*philo_routine(void *philo_void)
 	if (pthread_create(&tid, NULL, &monitor_philo, philo_void) != PTH_SUCCESS)
 		return ((void *)EXIT_FAILURE);
 	pthread_detach(tid);
-	while (1)
+	while (!(p->info->end))
 	{
 		philo_take_forks(philo_void);
 		philo_eat(philo_void);
