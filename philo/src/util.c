@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/25 17:32:35 by jisokang          #+#    #+#             */
-/*   Updated: 2021/10/09 13:34:09 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/10/12 13:35:15 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,17 @@
 
 void	print_message(t_philo *p, char *str)
 {
-	pthread_mutex_lock(&(p->info->print_mutex));
-	printf("%llums\t%d\t%s\t[%d]\n",
+	if (!pthread_mutex_lock(&(p->info->print_mutex))) {
+		printf("---- lock!\n");
+		printf("%llums\t%d\t%s\t[%d]\n",
 		get_time_ms() - p->info->main_start_time, p->num, str, p->eat_cnt);
-	if (p->stat != DEAD)
-		pthread_mutex_unlock(&(p->info->print_mutex));
+		if (p->stat != DEAD) {
+			printf("==== unlock!\n");
+			pthread_mutex_unlock(&(p->info->print_mutex));
+		}
+		else
+			printf("----[DIED!!!]----\n");
+	}
 }
 
 int	ft_atoi_philo(const char *str)
