@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 16:37:35 by jisokang          #+#    #+#             */
-/*   Updated: 2021/10/12 21:19:43 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/10/13 13:43:24 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,13 +56,8 @@ int	main(int argc, char **argv)
 		printf(RED"thread_run Fail\n"RESET);
 		return (EXIT_FAILURE);
 	}
-	// usleep(100000);
-	// printf("############ main\n");
-	if (!pthread_mutex_lock(&(info.die_mutex))) {
-		if (!pthread_mutex_unlock(&(info.die_mutex))) {
+	if (pthread_mutex_lock(&(info.die_mutex)) == PTH_SUCCESS)
+		if (pthread_mutex_unlock(&(info.die_mutex)) == PTH_SUCCESS)
 			destroy_mutex_all(&info);
-			printf(CYAN"main thread good bye\n"RESET);
-		}
-	}
 	return (EXIT_SUCCESS);
 }

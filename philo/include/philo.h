@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:54:15 by jisokang          #+#    #+#             */
-/*   Updated: 2021/10/12 19:36:48 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/10/13 14:10:01 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@
 # define TRUE			1
 
 # define PTH_SUCCESS	0
+# define EXIT_PASS		-1
 
 struct	s_info;
 
@@ -73,6 +74,9 @@ typedef struct s_info
 	pthread_mutex_t	*forks_mutex;
 	t_philo			*philo;
 }					t_info;
+
+/* MONITOR */
+void		*monitor_all_philo(void *info_void);
 
 /* THREAD */
 int			thread_run(t_info *info);
