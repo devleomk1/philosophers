@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/25 17:32:35 by jisokang          #+#    #+#             */
-/*   Updated: 2021/10/13 13:49:20 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/10/14 15:35:03 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,7 @@
 
 void	print_message(t_philo *p, char *str)
 {
-	(void)str;
-	if (p->info->end)
+	if (p->info->end == TRUE)
 		return ;
 	if (pthread_mutex_lock(&(p->info->print_mutex)) == PTH_SUCCESS)
 	{

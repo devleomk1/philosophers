@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/08 01:26:40 by jisokang          #+#    #+#             */
-/*   Updated: 2021/10/13 14:41:27 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/10/14 15:35:22 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	*philo_routine(void *philo_void)
 
 	p = (t_philo *)philo_void;
 	p->diecnt_start_time = p->info->main_start_time;
-	while (!(p->info->end))
+	while (p->info->end != TRUE)
 	{
 		philo_take_forks(philo_void);
 		philo_eat(philo_void);

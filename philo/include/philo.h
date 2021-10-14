@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:54:15 by jisokang          #+#    #+#             */
-/*   Updated: 2021/10/13 14:10:01 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/10/14 15:37:36 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,8 @@ typedef struct s_info
 	int				num_phi_full;
 	int				end;
 	uint64_t		main_start_time;
-	pthread_mutex_t	die_mutex;
+	pthread_mutex_t	main_mutex;
+	pthread_mutex_t	dead_mutex;
 	pthread_mutex_t	print_mutex;
 	pthread_mutex_t	*forks_mutex;
 	t_philo			*philo;

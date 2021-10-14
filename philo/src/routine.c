@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 13:48:44 by jisokang          #+#    #+#             */
-/*   Updated: 2021/10/13 11:50:17 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/10/14 15:36:53 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@ void	philo_take_forks(t_philo *p)
 	if (pthread_mutex_lock(p->r_fork) == PTH_SUCCESS)
 		print_message(p, "has taken a fork R");
 	else
-		pthread_mutex_unlock(&(p->info->die_mutex));
+		pthread_mutex_unlock(&(p->info->main_mutex));
 	if (pthread_mutex_lock(p->l_fork) == PTH_SUCCESS)
 		print_message(p, "has taken a fork L");
 	else
-		pthread_mutex_unlock(&(p->info->die_mutex));
+		pthread_mutex_unlock(&(p->info->main_mutex));
 }
 
 void	philo_eat(t_philo *p)

@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 16:37:35 by jisokang          #+#    #+#             */
-/*   Updated: 2021/10/13 13:43:24 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/10/14 15:51:33 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,12 @@ static void	destroy_mutex_all(t_info *info)
 {
 	int	i;
 
+	pthread_mutex_unlock(&(info->dead_mutex));
 	i = 0;
 	while (i < info->num_philo)
 		pthread_mutex_destroy(&(info->forks_mutex[i++]));
-	pthread_mutex_destroy(&(info->die_mutex));
+	pthread_mutex_destroy(&(info->main_mutex));
+	pthread_mutex_destroy(&(info->dead_mutex));
 	pthread_mutex_destroy(&(info->print_mutex));
 	free(info->forks_mutex);
 	free(info->philo);
@@ -56,8 +58,8 @@ int	main(int argc, char **argv)
 		printf(RED"thread_run Fail\n"RESET);
 		return (EXIT_FAILURE);
 	}
-	if (pthread_mutex_lock(&(info.die_mutex)) == PTH_SUCCESS)
-		if (pthread_mutex_unlock(&(info.die_mutex)) == PTH_SUCCESS)
+	if (pthread_mutex_lock(&(info.main_mutex)) == PTH_SUCCESS)
+		if (pthread_mutex_unlock(&(info.main_mutex)) == PTH_SUCCESS)
 			destroy_mutex_all(&info);
 	return (EXIT_SUCCESS);
 }

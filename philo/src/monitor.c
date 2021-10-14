@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 13:50:36 by jisokang          #+#    #+#             */
-/*   Updated: 2021/10/13 14:41:31 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/10/14 15:41:30 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	monitor_cnt_eat(t_info *info)
 		{
 			printf(BLUE "🍝All philosophers have finished their meals.\n" RESET);
 			usleep(100);
-			pthread_mutex_unlock(&(info->die_mutex));
+			pthread_mutex_unlock(&(info->main_mutex));
 			return (EXIT_SUCCESS);
 		}
 		return (EXIT_FAILURE);
@@ -32,11 +32,15 @@ int	monitor_health(t_info *info, int i)
 {
 	if (get_time_ms() - info->philo[i].diecnt_start_time > info->time_die)
 	{
-		info->philo[i].stat = DEAD;
-		print_message(&(info->philo[i]), "dead\t\t");
-		info->end = TRUE;
-		usleep(100);
-		pthread_mutex_unlock(&(info->die_mutex));
+		if (pthread_mutex_lock(&(info->dead_mutex)) == PTH_SUCCESS)
+		{
+			info->philo[i].stat = DEAD;
+			print_message(&(info->philo[i]), "dead\t\t");
+			info->end = TRUE;
+			usleep(100);
+			pthread_mutex_unlock(&(info->main_mutex));
+			return (EXIT_SUCCESS);
+		}
 		return (EXIT_SUCCESS);
 	}
 	return (EXIT_PASS);

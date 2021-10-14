@@ -6,7 +6,7 @@
 /*   By: jisokang <jisokang@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 15:37:09 by jisokang          #+#    #+#             */
-/*   Updated: 2021/10/12 20:34:37 by jisokang         ###   ########.fr       */
+/*   Updated: 2021/10/14 15:38:00 by jisokang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,11 @@ static int	init_pth_mutex(t_info *info)
 {
 	if (pthread_mutex_init(&(info->print_mutex), NULL) != PTH_SUCCESS)
 		return (EXIT_FAILURE);
-	if (pthread_mutex_init(&(info->die_mutex), NULL) != PTH_SUCCESS)
+	if (pthread_mutex_init(&(info->main_mutex), NULL) != PTH_SUCCESS)
 		return (EXIT_FAILURE);
-	pthread_mutex_lock(&(info->die_mutex));
+	if (pthread_mutex_init(&(info->dead_mutex), NULL) != PTH_SUCCESS)
+		return (EXIT_FAILURE);
+	pthread_mutex_lock(&(info->main_mutex));
 	return (EXIT_SUCCESS);
 }
 
